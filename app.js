@@ -7,16 +7,26 @@ const morgan = require("morgan");
 
 const app = express();
 
+const { sequelize } = require("./database");
+
+sequelize
+  .authenticate()
+  .then(() => console.log("Conexión a base de datos exitosa"))
+  .catch((error) => console.log("Error al conectar a base de datos", error));
+
+require("ejs");
+app.set("view engine", "ejs");
+
 require("dotenv").config();
 const port = process.env.PORT || 3000;
 
 // Middlewares
 // TODO: Implementar middlewares
-app.use(corse());
-app.use(helmet());
+app.use(cors());
+//app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
-app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
@@ -24,7 +34,19 @@ app.use(require("./routes/reserva.routes"));
 
 // TODO: Si la petición no coincide con ninguna de las rutas declaradas, mostrar error 404
 app.use((req, res, next) => {
-  return res.status(404).render("404");
+  res.write(`<div>
+        <h1>404 - Ruta no encontrada</h1>
+        <hr>
+        <p>La pagina que intentas buscar no existe</p>
+        <p>Redireccionando a la página de inicio...</p>
+        <script>
+        (
+          () => setTimeout(() => {
+            window.location.href='http://localhost:${port}/';
+           }, 3000)           
+        )();
+        </script>
+    </h1>`);
 });
 // Starting the server
 app.listen(port, () => console.log(`server corriendo en el puerto ${port}`));
