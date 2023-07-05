@@ -14,14 +14,18 @@ const mostrarReservas = (reservas, tablaElement) => {
         <tr>
             <td>${reserva.nombre}</td>
             <td>${reserva.apellido}</td>
-            <td>${reserva.fecha_salida}</td>
-            <td>${reserva.fecha_llegada}</td>
+            <td>${dayjs(reserva.fecha_salida).format("DD-MM-YYYY HH:mm")}</td>
+            <td>${dayjs(reserva.fecha_llegada).format("DD-MM-YYYY HH:mm")}</td>
             <td>${reserva.email}</td>
             <td>${reserva.telefono}</td>
             <td>
            <div class="row">
-           <a href="/reserva/editar/${reserva.id}" class="btn btn-sm btn-warning">Editar</a>
-           <button class="btn btn-danger btn-sm" data-id="${reserva.id}" onClick=eliminarReserva(event)>Eliminar</button>
+           <a href="/reserva/editar/${
+             reserva.id
+           }" class="btn btn-sm btn-warning">Editar</a>
+           <button class="btn btn-danger btn-sm" data-id="${
+             reserva.id
+           }" onClick=eliminarReserva(event)>Eliminar</button>
            </div>
             </td>
         </tr>
